@@ -1,0 +1,20 @@
+{% extends "_base" %}
+{% block title %}Hi!{% endblock title %}
+{% block content %}
+<p>
+I am a Software Engineer, constantly improving at <b>system design</b> and <b>mentoring my peers</b>.
+</p>
+<p>
+    Around work, I contribute to open-source sometimes:
+    <ul>
+        {% for project in projects %}
+            <li>{{project.name}}</li>
+        {% endfor %}
+    </ul>
+</p>
+
+<p>
+Outside of work, I do all of the stereotypical nerdy hobbies.
+</p>
+<h1><a href="mailto:yaojie@hey.com">📧</a></h1>
+{% endblock content %}
