@@ -1,8 +1,8 @@
-use std::io::Read;
-use std::fs::File;
+use std::{fs, fs::File, io::Read};
 
+use rand::Rng;
 use markdown::Options;
-use rocket::{response::status::NotFound, serde::Serialize, Request, http::Status};
+use rocket::{serde::Serialize, Request, http::Status};
 use rocket_dyn_templates::{context, Template};
 #[macro_use] extern crate rocket;
 
@@ -17,15 +17,24 @@ struct Project<'a> {
 fn index() -> Template {
     let projects = [
         Project { name: "mockpass", description: "A mock SingPass / CorpPass / MyInfo server for dev purposes" },
-        Project { name: "MyInfo API on Rails", description: "MyInfo API wrappers for Rails" },
-        Project { name: "is_uen", description: "Simple gem to check whether a UEN has a valid format and date" },
+        Project { name: "myinfo-rails", description: "MyInfo API wrappers for Rails" },
+        Project { name: "is_uen", description: "Simple gem to check whether a UEN has a valid format and date" }
     ];
 
-    Template::render("index", context! { projects })
+    let hobbies = [
+        "play the piano", 
+        "draw", 
+        "brew filter coffee", 
+        "make espresso",
+        "collect CDs",
+        "collect keyboards",
+    ];
+    let random_hobby = hobbies[rand::thread_rng().gen_range(0..hobbies.len())];
+    Template::render("index", context! { projects, random_hobby })
 }
 
 #[get("/posts/<slug>")]
-fn post(slug: &str) -> Result<Template, NotFound<String>> {
+fn post(slug: &str) -> Option<Template> {
     let article_path = format!("./posts/{}.md", slug);
     let article = File::open(article_path);
     let mut content = String::new();
@@ -34,10 +43,16 @@ fn post(slug: &str) -> Result<Template, NotFound<String>> {
         Ok(mut file) =>  {
             file.read_to_string(&mut content).unwrap();
             let content =  &markdown::to_html_with_options(&content, &Options::gfm()).expect(".md should be valid");
-            Ok(Template::render("post", context! { content }))
+            Some(Template::render("post", context! { content }))
         }
-        Err(e) => Err(NotFound(e.to_string()))
+        Err(_) => None
     }
+}
+
+#[get("/posts")]
+fn posts() -> Template {
+    let articles: Vec<String> = fs::read_dir("./posts").unwrap().map(|post| post.unwrap().path().as_path().file_stem().unwrap().to_os_string().into_string().unwrap()).collect();
+    Template::render("posts", context! { articles })
 }
 
 #[catch(default)]
@@ -49,6 +64,6 @@ fn default_catcher(status: Status, _: &Request) -> Template {
 fn rocket() -> _ {
     rocket::build()
         .attach(Template::fairing())
-        .mount("/", routes![index, post])
+        .mount("/", routes![index, post, posts])
         .register("/", catchers![default_catcher])
 }

@@ -1326,6 +1326,7 @@ name = "rocket-blog"
 version = "0.1.0"
 dependencies = [
  "markdown",
+ "rand",
  "rocket",
  "rocket_dyn_templates",
 ]

@@ -2,19 +2,27 @@
 {% block title %}Hi!{% endblock title %}
 {% block content %}
 <p>
-I am a Software Engineer, constantly improving at <b>system design</b> and <b>mentoring my peers</b>.
+<img src="https://www.causztic.com/images/profile.jpg" width="100">
+<br/>
+I am Lim Yao Jie (yaojie is my given name).
+<br/>
+I am a Software Engineer, and am constantly improving at <b>system design</b> and <b>mentoring my peers</b>.
 </p>
 <p>
-    Around work, I contribute to open-source sometimes:
+    Around work, I write articles, and contribute to open-source sometimes:
     <ul>
         {% for project in projects %}
-            <li>{{project.name}}</li>
+            <li>
+                <b>{{project.name}}</b>
+                <br/>
+                <small>{{ project.description }}</small>
+            </li>
         {% endfor %}
     </ul>
 </p>
 
 <p>
-Outside of work, I do all of the stereotypical nerdy hobbies.
+Outside of work, I {{ random_hobby }} sometimes!
 </p>
-<h1><a href="mailto:yaojie@hey.com">📧</a></h1>
+<a class="button" href="mailto:yaojie@hey.com">Email</a>
 {% endblock content %}
