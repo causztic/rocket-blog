@@ -2,7 +2,7 @@ use std::io::Read;
 use std::fs::File;
 
 use markdown::Options;
-use rocket::{response::status::NotFound, serde::Serialize};
+use rocket::{response::status::NotFound, serde::Serialize, Request, http::Status};
 use rocket_dyn_templates::{context, Template};
 #[macro_use] extern crate rocket;
 
@@ -40,9 +40,15 @@ fn post(slug: &str) -> Result<Template, NotFound<String>> {
     }
 }
 
+#[catch(default)]
+fn default_catcher(status: Status, _: &Request) -> Template {
+    Template::render("error", context! { status })
+}
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
         .attach(Template::fairing())
         .mount("/", routes![index, post])
+        .register("/", catchers![default_catcher])
 }
