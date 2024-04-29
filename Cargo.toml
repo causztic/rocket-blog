@@ -9,6 +9,7 @@ edition = "2021"
 markdown = "1.0.0-alpha.17"
 rocket = "0.5.0"
 rand = "0.8.5"
+indexmap = "2.2.6"
 
 [dependencies.rocket_dyn_templates]
 version = "0.1.0"

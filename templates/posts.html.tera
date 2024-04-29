@@ -1,8 +1,11 @@
 {% extends "_base" %}
 {% block content %}
 <ul>
-    {% for article in articles %}
-      <li><a href = "posts/{{article}}">{{ article }}</a></li>
+    {% for post in posts %}
+      <li>
+        <a href = "posts/{{post[0]}}">{{ post[0] }}</a>
+        {{ post[1].date }}
+      </li>
     {% endfor %}
 </ul>
 {% endblock content %}

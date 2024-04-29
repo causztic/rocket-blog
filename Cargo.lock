@@ -1325,6 +1325,7 @@ dependencies = [
 name = "rocket-blog"
 version = "0.1.0"
 dependencies = [
+ "indexmap",
  "markdown",
  "rand",
  "rocket",
