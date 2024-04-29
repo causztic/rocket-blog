@@ -1,5 +1,7 @@
-use std::{fs, path::Path};
+use std::io::Read;
+use std::fs::File;
 
+use markdown::Options;
 use rocket::{response::status::NotFound, serde::Serialize};
 use rocket_dyn_templates::{context, Template};
 #[macro_use] extern crate rocket;
@@ -23,12 +25,19 @@ fn index() -> Template {
 }
 
 #[get("/posts/<slug>")]
-async fn post(slug: &str) -> Result<Template, NotFound<String>> {
-    let path = Path::new("posts").join(slug);
-    fs::read_to_string(&path)
-        .map(|content| Template::render("post", context! { content }))
-        .map_err(|e| NotFound(e.to_string())
-    )
+fn post(slug: &str) -> Result<Template, NotFound<String>> {
+    let article_path = format!("./posts/{}.md", slug);
+    let article = File::open(article_path);
+    let mut content = String::new();
+
+    match article {
+        Ok(mut file) =>  {
+            file.read_to_string(&mut content).unwrap();
+            let content =  &markdown::to_html_with_options(&content, &Options::gfm()).expect(".md should be valid");
+            Ok(Template::render("post", context! { content }))
+        }
+        Err(e) => Err(NotFound(e.to_string()))
+    }
 }
 
 #[launch]

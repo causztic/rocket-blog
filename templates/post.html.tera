@@ -1,3 +1,4 @@
+{% extends "_base" %}
 {% block content %}
-{{content}}
+{{content | safe }}
 {% endblock content %}
