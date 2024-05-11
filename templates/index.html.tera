@@ -4,8 +4,6 @@
 <p>
 <img src="https://www.causztic.com/images/profile.jpg" width="100">
 <br/>
-I am Lim Yao Jie (yaojie is my given name).
-<br/>
 I am a Software Engineer, and am constantly improving at <b>system design</b> and <b>mentoring my peers</b>.
 </p>
 <p>
@@ -24,5 +22,6 @@ I am a Software Engineer, and am constantly improving at <b>system design</b> an
 <p>
 Outside of work, I {{ random_hobby }} sometimes!
 </p>
-<a class="button" href="mailto:yaojie@hey.com">Email</a>
+<a class="button" target="_blank" href="https://www.linkedin.com/in/limyaojie" noreferrer noopener>LinkedIn</a>
+<a class="button" href="mailto:yaojie@hey.com" noreferrer noopener>Email</a>
 {% endblock content %}
